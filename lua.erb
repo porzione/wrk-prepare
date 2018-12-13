@@ -1,0 +1,26 @@
+wrk.path   = '<%= path %>'
+<% if data -%>
+wrk.method = "POST"
+wrk.body   = <%= data %>
+wrk.headers["Content-Type"] = "application/x-www-form-urlencoded"
+<% end %>
+
+-- curl -I <%= scheme %>://<%= host %><%= path %><% if ip %> --resolve <%= host %>:<%= port %>:<%= ip %><% end %>
+
+<% if ip && port -%>
+function setup(thread)
+  thread.addr = wrk.lookup("<%= ip %>", "<%= port %>")[1]
+end
+<% end %>
+
+<% if log -%>
+function init(args)
+  logf = io.open("<%= log %>", "w")
+end
+
+function response(status, headers, body)
+  logf:write(status .. "\r\n")
+  --logf:write(headers .. "\r\n")
+  logf:write(body .. "\r\n\r\n")
+end
+<% end %>

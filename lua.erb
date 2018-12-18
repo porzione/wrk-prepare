@@ -1,11 +1,11 @@
+-- curl -I <%= scheme %>://<%= host %><%= path %><%= query %><% if ip %> --resolve <%= host %>:<%= port %>:<%= ip %><% end %>
+
 wrk.path   = '<%= path %>'
 <% if data -%>
 wrk.method = "POST"
 wrk.body   = <%= data %>
 wrk.headers["Content-Type"] = "application/x-www-form-urlencoded"
 <% end %>
-
--- curl -I <%= scheme %>://<%= host %><%= path %><% if ip %> --resolve <%= host %>:<%= port %>:<%= ip %><% end %>
 
 <% if ip && port -%>
 function setup(thread)
